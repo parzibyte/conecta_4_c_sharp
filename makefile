@@ -4,6 +4,6 @@ FILENAME=Conecta4.cs
 
 run:
 	${CC} ${FILENAME}
-	./Conecta4.exe < diagonal.txt
-	./Conecta4.exe < empate.txt
-	./Conecta4.exe < gana_el_primero.txt
+	# ./Conecta4.exe < diagonal.txt
+	# ./Conecta4.exe < empate.txt
+	# ./Conecta4.exe < gana_el_primero.txt
