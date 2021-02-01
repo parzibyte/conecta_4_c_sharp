@@ -50,139 +50,168 @@ class Conecta4
     static string JUGADOR_CPU_2 = JUGADOR_2;
     static string JUGADOR_CPU_1 = JUGADOR_1;
 
-    static string[,] clonarMatriz(string[,] tableroOriginal) {
+    static string[,] clonarMatriz(string[,] tableroOriginal)
+    {
         return tableroOriginal.Clone() as string[,];
     }
 
-static int obtenerColumnaGanadora(string jugador, string[,] tableroOriginal) {
-    string [,] tablero = new string[FILAS,COLUMNAS];
-    int i;
-    for (i = 0; i < COLUMNAS; i++) {
-        tablero = clonarMatriz(tableroOriginal);
-        int resultado = colocarPieza(jugador, i, tablero);
-        if (resultado == ERROR_NINGUNO) {
-            int gana = ganador(jugador, tablero);
-            if (gana != NO_CONECTA) {
+    static int obtenerColumnaGanadora(string jugador, string[,] tableroOriginal)
+    {
+        string[,] tablero = new string[FILAS, COLUMNAS];
+        int i;
+        for (i = 0; i < COLUMNAS; i++)
+        {
+            tablero = clonarMatriz(tableroOriginal);
+            int resultado = colocarPieza(jugador, i, tablero);
+            if (resultado == ERROR_NINGUNO)
+            {
+                int gana = ganador(jugador, tablero);
+                if (gana != NO_CONECTA)
+                {
+                    return i;
+                }
+            }
+        }
+        return COLUMNA_GANADORA_NO_ENCONTRADA;
+    }
+
+    static int obtenerPrimeraFilaLlena(int columna, string[,] tablero)
+    {
+        int i;
+        for (i = 0; i < FILAS; ++i)
+        {
+            if (tablero[i, columna] != ESPACIO_VACIO)
+            {
                 return i;
             }
         }
+        return FILA_NO_ENCONTRADA;
     }
-    return COLUMNA_GANADORA_NO_ENCONTRADA;
-}
 
-static int obtenerPrimeraFilaLlena(int columna, string[,] tablero) {
-    int i;
-    for (i = 0; i < FILAS; ++i) {
-        if (tablero[i,columna] != ESPACIO_VACIO) {
-            return i;
-        }
-    }
-    return FILA_NO_ENCONTRADA;
-}
+    static (int, int) obtenerColumnaEnLaQueSeObtieneMayorPuntaje(string jugador, string[,] tableroOriginal)
+    {
 
- static (int,int) obtenerColumnaEnLaQueSeObtieneMayorPuntaje(string jugador, string[,] tableroOriginal) {
-
-    int conteoMayor = 0, indiceColumnaConConteoMayor = -1;
-    string[,] tablero=new string[FILAS,COLUMNAS];
-    int i;
-    for (i = 0; i < COLUMNAS; ++i) {
-tablero=clonarMatriz(tableroOriginal);
-        int estado = colocarPieza(jugador, i, tablero);
-        if (estado == ERROR_NINGUNO) {
-            int filaDePiezaRecienColocada = obtenerPrimeraFilaLlena(i, tablero);
-            if (filaDePiezaRecienColocada != FILA_NO_ENCONTRADA) {
-                int c = contarArriba(i, filaDePiezaRecienColocada, jugador, tablero);
-                if (c > conteoMayor) {
-                    conteoMayor = c;
-                    indiceColumnaConConteoMayor = i;
-                }
-                c = contarArribaDerecha(i, filaDePiezaRecienColocada, jugador, tablero);
-                if (c > conteoMayor) {
-                    conteoMayor = c;
-                    indiceColumnaConConteoMayor = i;
-                }
-                c = contarDerecha(i, filaDePiezaRecienColocada, jugador, tablero);
-                if (c > conteoMayor) {
-                    conteoMayor = c;
-                    indiceColumnaConConteoMayor = i;
-                }
-                c = contarAbajoDerecha(i, filaDePiezaRecienColocada, jugador, tablero);
-                if (c > conteoMayor) {
-                    conteoMayor = c;
-                    indiceColumnaConConteoMayor = i;
+        int conteoMayor = 0, indiceColumnaConConteoMayor = -1;
+        string[,] tablero = new string[FILAS, COLUMNAS];
+        int i;
+        for (i = 0; i < COLUMNAS; ++i)
+        {
+            tablero = clonarMatriz(tableroOriginal);
+            int estado = colocarPieza(jugador, i, tablero);
+            if (estado == ERROR_NINGUNO)
+            {
+                int filaDePiezaRecienColocada = obtenerPrimeraFilaLlena(i, tablero);
+                if (filaDePiezaRecienColocada != FILA_NO_ENCONTRADA)
+                {
+                    int c = contarArriba(i, filaDePiezaRecienColocada, jugador, tablero);
+                    if (c > conteoMayor)
+                    {
+                        conteoMayor = c;
+                        indiceColumnaConConteoMayor = i;
+                    }
+                    c = contarArribaDerecha(i, filaDePiezaRecienColocada, jugador, tablero);
+                    if (c > conteoMayor)
+                    {
+                        conteoMayor = c;
+                        indiceColumnaConConteoMayor = i;
+                    }
+                    c = contarDerecha(i, filaDePiezaRecienColocada, jugador, tablero);
+                    if (c > conteoMayor)
+                    {
+                        conteoMayor = c;
+                        indiceColumnaConConteoMayor = i;
+                    }
+                    c = contarAbajoDerecha(i, filaDePiezaRecienColocada, jugador, tablero);
+                    if (c > conteoMayor)
+                    {
+                        conteoMayor = c;
+                        indiceColumnaConConteoMayor = i;
+                    }
                 }
             }
         }
+        return (conteoMayor, indiceColumnaConConteoMayor);
     }
-    return (conteoMayor, indiceColumnaConConteoMayor);
-}
 
 
 
-static int obtenerColumnaAleatoria(string jugador, string[,] tableroOriginal) {
-    while (true) {
-string[,] tablero = new string[FILAS, COLUMNAS];
-tablero= clonarMatriz(tableroOriginal);
-        int columna = aleatorio_en_rango(0, COLUMNAS - 1);
-        int resultado = colocarPieza(jugador, columna, tablero);
-        if (resultado == ERROR_NINGUNO) {
-            return columna;
+    static int obtenerColumnaAleatoria(string jugador, string[,] tableroOriginal)
+    {
+        while (true)
+        {
+            string[,] tablero = new string[FILAS, COLUMNAS];
+            tablero = clonarMatriz(tableroOriginal);
+            int columna = aleatorio_en_rango(0, COLUMNAS - 1);
+            int resultado = colocarPieza(jugador, columna, tablero);
+            if (resultado == ERROR_NINGUNO)
+            {
+                return columna;
+            }
         }
     }
-}
 
-static int obtenerColumnaCentral(string jugador, string[,] tableroOriginal) {
-string[,] tablero = new string[FILAS, COLUMNAS];
-tablero= clonarMatriz(tableroOriginal);
-    int mitad = (COLUMNAS - 1) / 2;
-    int resultado = colocarPieza(jugador, mitad, tablero);
-    if (resultado == ERROR_NINGUNO) {
-        return mitad;
+    static int obtenerColumnaCentral(string jugador, string[,] tableroOriginal)
+    {
+        string[,] tablero = new string[FILAS, COLUMNAS];
+        tablero = clonarMatriz(tableroOriginal);
+        int mitad = (COLUMNAS - 1) / 2;
+        int resultado = colocarPieza(jugador, mitad, tablero);
+        if (resultado == ERROR_NINGUNO)
+        {
+            return mitad;
+        }
+        return COLUMNA_GANADORA_NO_ENCONTRADA;
     }
-    return COLUMNA_GANADORA_NO_ENCONTRADA;
-}
 
-static int elegirColumnaCpu(string jugador, string[,] tablero) {
-    // Voy a comprobar si puedo ganar...
-    int posibleColumnaGanadora = obtenerColumnaGanadora(jugador, tablero);
-    if (posibleColumnaGanadora != COLUMNA_GANADORA_NO_ENCONTRADA) {
-        System.Console.Write("*elijo ganar*\n");
-        return posibleColumnaGanadora;
-    }
-    // Si no, voy a comprobar si mi oponente gana con el siguiente movimiento, para evitarlo
-    string oponente = obtenerOponente(jugador);
-    int posibleColumnaGanadoraDeOponente = obtenerColumnaGanadora(oponente, tablero);
-    if (posibleColumnaGanadoraDeOponente != COLUMNA_GANADORA_NO_ENCONTRADA) {
-        System.Console.Write("*elijo evitar que mi oponente gane*\n");
-        return posibleColumnaGanadoraDeOponente;
-    }
-    // En caso de que nadie pueda ganar en el siguiente movimiento, buscaré en dónde se obtiene el mayor
-    // puntaje al colocar la pieza
-    var (conteoCpu, columnaCpu) = obtenerColumnaEnLaQueSeObtieneMayorPuntaje(jugador, tablero);
-    var (conteoOponente, columnaOponente) = obtenerColumnaEnLaQueSeObtieneMayorPuntaje(oponente, tablero);
-    if (conteoOponente > conteoCpu) {
-        System.Console.Write("*elijo quitarle el puntaje a mi oponente*\n");
-        return columnaOponente;
-    } else if (conteoCpu > 1) {
-        System.Console.Write("*elijo colocarla en donde obtengo un mayor puntaje*\n");
-        return columnaCpu;
-    }
-    // Si no, regresar la central por si está desocupada
+    static int elegirColumnaCpu(string jugador, string[,] tablero)
+    {
+        // Voy a comprobar si puedo ganar...
+        int posibleColumnaGanadora = obtenerColumnaGanadora(jugador, tablero);
+        if (posibleColumnaGanadora != COLUMNA_GANADORA_NO_ENCONTRADA)
+        {
+            System.Console.Write("*elijo ganar*\n");
+            return posibleColumnaGanadora;
+        }
+        // Si no, voy a comprobar si mi oponente gana con el siguiente movimiento, para evitarlo
+        string oponente = obtenerOponente(jugador);
+        int posibleColumnaGanadoraDeOponente = obtenerColumnaGanadora(oponente, tablero);
+        if (posibleColumnaGanadoraDeOponente != COLUMNA_GANADORA_NO_ENCONTRADA)
+        {
+            System.Console.Write("*elijo evitar que mi oponente gane*\n");
+            return posibleColumnaGanadoraDeOponente;
+        }
+        // En caso de que nadie pueda ganar en el siguiente movimiento, buscaré en dónde se obtiene el mayor
+        // puntaje al colocar la pieza
+        var (conteoCpu, columnaCpu) = obtenerColumnaEnLaQueSeObtieneMayorPuntaje(jugador, tablero);
+        var (conteoOponente, columnaOponente) = obtenerColumnaEnLaQueSeObtieneMayorPuntaje(oponente, tablero);
+        if (conteoOponente > conteoCpu)
+        {
+            System.Console.Write("*elijo quitarle el puntaje a mi oponente*\n");
+            return columnaOponente;
+        }
+        else if (conteoCpu > 1)
+        {
+            System.Console.Write("*elijo colocarla en donde obtengo un mayor puntaje*\n");
+            return columnaCpu;
+        }
+        // Si no, regresar la central por si está desocupada
 
-    int columnaCentral = obtenerColumnaCentral(jugador, tablero);
-    if (columnaCentral != COLUMNA_GANADORA_NO_ENCONTRADA) {
-        System.Console.Write("*elijo ponerla en el centro*\n");
-        return columnaCentral;
+        int columnaCentral = obtenerColumnaCentral(jugador, tablero);
+        if (columnaCentral != COLUMNA_GANADORA_NO_ENCONTRADA)
+        {
+            System.Console.Write("*elijo ponerla en el centro*\n");
+            return columnaCentral;
+        }
+        // Finalmente, devolver la primera disponible de manera aleatoria
+        int columna = obtenerColumnaAleatoria(jugador, tablero);
+        if (columna != FILA_NO_ENCONTRADA)
+        {
+            System.Console.Write("*elijo la primera vacía aleatoria*\n");
+            return columna;
+        }
+        System.Console.Write("Esto no debería suceder\n");
+        return 0;
     }
-    // Finalmente, devolver la primera disponible de manera aleatoria
-    int columna = obtenerColumnaAleatoria(jugador, tablero);
-    if (columna != FILA_NO_ENCONTRADA) {
-        System.Console.Write("*elijo la primera vacía aleatoria*\n");
-        return columna;
-    }
-    System.Console.Write("Esto no debería suceder\n");
-    return 0;
-}
 
 
 
@@ -397,18 +426,26 @@ static int elegirColumnaCpu(string jugador, string[,] tablero) {
             int columna = 0;
             System.Console.WriteLine("\nTurno del jugador " + jugadorActual);
             dibujarTablero(tablero);
-            if(modo==MODO_HUMANO_CONTRA_CPU){
-                if(jugadorActual == JUGADOR_CPU_2){
+            if (modo == MODO_HUMANO_CONTRA_CPU)
+            {
+                if (jugadorActual == JUGADOR_CPU_2)
+                {
                     System.Console.Write("CPU 2 pensando...");
-                    columna = elegirColumnaCpu(jugadorActual,tablero);
-                }else{
+                    columna = elegirColumnaCpu(jugadorActual, tablero);
+                }
+                else
+                {
                     columna = solicitarColumnaAJugador();
                 }
-            }else if(modo == MODO_CPU_CONTRA_CPU){
-                
-                    System.Console.Write($"CPU {(jugadorActual ==JUGADOR_CPU_1 ? "1" : "2")} pensando...");
-                    columna = elegirColumnaCpu(jugadorActual, tablero);
-            }else if(modo == MODO_HUMANO_CONTRA_HUMANO){
+            }
+            else if (modo == MODO_CPU_CONTRA_CPU)
+            {
+
+                System.Console.Write($"CPU {(jugadorActual == JUGADOR_CPU_1 ? "1" : "2")} pensando...");
+                columna = elegirColumnaCpu(jugadorActual, tablero);
+            }
+            else if (modo == MODO_HUMANO_CONTRA_HUMANO)
+            {
                 columna = solicitarColumnaAJugador();
             }
             int estado = colocarPieza(jugadorActual, columna, tablero);
@@ -488,9 +525,10 @@ static int elegirColumnaCpu(string jugador, string[,] tablero) {
         System.Console.Write("Elige: ");
         int modo = System.Convert.ToInt32(System.Console.ReadLine());
         // Perdonar por el if tan largo
-        if(modo != MODO_HUMANO_CONTRA_HUMANO && modo != MODO_HUMANO_CONTRA_CPU && modo != MODO_CPU_CONTRA_CPU){
-        System.Console.WriteLine("Saliendo...");
-        return;
+        if (modo != MODO_HUMANO_CONTRA_HUMANO && modo != MODO_HUMANO_CONTRA_CPU && modo != MODO_CPU_CONTRA_CPU)
+        {
+            System.Console.WriteLine("Saliendo...");
+            return;
         }
         // Si todo va bien...
         jugar(modo);
