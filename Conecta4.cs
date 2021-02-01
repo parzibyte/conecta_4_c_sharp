@@ -33,16 +33,22 @@ class Conecta4
     static string JUGADOR_1 = "o";
     static string JUGADOR_2 = "x";
     static string ESPACIO_VACIO = " ";
+    static int MODO_HUMANO_CONTRA_HUMANO = 1;
+    static int MODO_HUMANO_CONTRA_CPU = 2;
+    static int MODO_CPU_CONTRA_CPU = 3;
+    static int OPCION_MENU_SALIR = 4;
     static int ERROR_FILA_INVALIDA = 0;
-    static int ERROR_COLUMNA_LLENA = 1;
-    static int ERROR_NINGUNO = 2;
-    static int CONECTA_ARRIBA = 3;
-    static int CONECTA_DERECHA = 4;
+    static int ERROR_COLUMNA_LLENA = 28;
+    static int ERROR_NINGUNO = 11;
+    static int CONECTA_ARRIBA = 96;
     static int CONECTA_ABAJO_DERECHA = 5;
     static int CONECTA_ARRIBA_DERECHA = 6;
     static int NO_CONECTA = 7;
     static int FILA_NO_ENCONTRADA = 8;
     static int COLUMNA_GANADORA_NO_ENCONTRADA = 9;
+    static int CONECTA_DERECHA = 10;
+    static string JUGADOR_CPU_2 = JUGADOR_2;
+    static string JUGADOR_CPU_1 = JUGADOR_1;
 
     static string[,] clonarMatriz(string[,] tableroOriginal) {
         return tableroOriginal.Clone() as string[,];
@@ -125,7 +131,7 @@ tablero= clonarMatriz(tableroOriginal);
     }
 }
 
-int obtenerColumnaCentral(string jugador, string[,] tableroOriginal) {
+static int obtenerColumnaCentral(string jugador, string[,] tableroOriginal) {
 string[,] tablero = new string[FILAS, COLUMNAS];
 tablero= clonarMatriz(tableroOriginal);
     int mitad = (COLUMNAS - 1) / 2;
@@ -136,7 +142,7 @@ tablero= clonarMatriz(tableroOriginal);
     return COLUMNA_GANADORA_NO_ENCONTRADA;
 }
 
-int elegirColumnaCpu(string jugador, string[,] tablero) {
+static int elegirColumnaCpu(string jugador, string[,] tablero) {
     // Voy a comprobar si puedo ganar...
     int posibleColumnaGanadora = obtenerColumnaGanadora(jugador, tablero);
     if (posibleColumnaGanadora != COLUMNA_GANADORA_NO_ENCONTRADA) {
@@ -380,7 +386,7 @@ int elegirColumnaCpu(string jugador, string[,] tablero) {
         }
         return contador;
     }
-    static void jugarJugadorVsJugador()
+    static void jugar(int modo)
     {
         string[,] tablero = new string[FILAS, COLUMNAS];
         limpiarTablero(tablero);
@@ -391,8 +397,20 @@ int elegirColumnaCpu(string jugador, string[,] tablero) {
             int columna = 0;
             System.Console.WriteLine("\nTurno del jugador " + jugadorActual);
             dibujarTablero(tablero);
-
-            columna = solicitarColumnaAJugador();
+            if(modo==MODO_HUMANO_CONTRA_CPU){
+                if(jugadorActual == JUGADOR_CPU_2){
+                    System.Console.Write("CPU 2 pensando...");
+                    columna = elegirColumnaCpu(jugadorActual,tablero);
+                }else{
+                    columna = solicitarColumnaAJugador();
+                }
+            }else if(modo == MODO_CPU_CONTRA_CPU){
+                
+                    System.Console.Write($"CPU {(jugadorActual ==JUGADOR_CPU_1 ? "1" : "2")} pensando...");
+                    columna = elegirColumnaCpu(jugadorActual, tablero);
+            }else if(modo == MODO_HUMANO_CONTRA_HUMANO){
+                columna = solicitarColumnaAJugador();
+            }
             int estado = colocarPieza(jugadorActual, columna, tablero);
             if (estado == ERROR_COLUMNA_LLENA)
             {
@@ -463,6 +481,18 @@ int elegirColumnaCpu(string jugador, string[,] tablero) {
 
     static void Main(string[] args)
     {
-        jugarJugadorVsJugador();
+        System.Console.WriteLine($"{MODO_HUMANO_CONTRA_HUMANO} => Modo humano contra humano");
+        System.Console.WriteLine($"{MODO_HUMANO_CONTRA_CPU} => Modo humano contra CPU");
+        System.Console.WriteLine($"{MODO_CPU_CONTRA_CPU} => Modo CPU contra CPU");
+        System.Console.WriteLine($"{OPCION_MENU_SALIR} => Salir");
+        System.Console.Write("Elige: ");
+        int modo = System.Convert.ToInt32(System.Console.ReadLine());
+        // Perdonar por el if tan largo
+        if(modo != MODO_HUMANO_CONTRA_HUMANO && modo != MODO_HUMANO_CONTRA_CPU && modo != MODO_CPU_CONTRA_CPU){
+        System.Console.WriteLine("Saliendo...");
+        return;
+        }
+        // Si todo va bien...
+        jugar(modo);
     }
 }
