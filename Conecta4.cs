@@ -518,6 +518,8 @@ class Conecta4
 
     static void Main(string[] args)
     {
+        System.Console.WriteLine("Parzibyte presenta: Conecta 4 en C#");
+        System.Console.WriteLine("  https://parzibyte.me/blog");
         System.Console.WriteLine($"{MODO_HUMANO_CONTRA_HUMANO} => Modo humano contra humano");
         System.Console.WriteLine($"{MODO_HUMANO_CONTRA_CPU} => Modo humano contra CPU");
         System.Console.WriteLine($"{MODO_CPU_CONTRA_CPU} => Modo CPU contra CPU");
