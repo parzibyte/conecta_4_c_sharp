@@ -27,26 +27,28 @@ También tengo canal de YouTube: https://www.youtube.com/channel/UCroP4BTWjfM0Ck
 */
 class Conecta4
 {
-    static int FILAS = 4;
-    static int COLUMNAS = 4;
-    static int CONECTA = 4;
+    static int FILAS = 10;
+    static int COLUMNAS = 10;
+    static int CONECTA = 7;
     static string JUGADOR_1 = "o";
     static string JUGADOR_2 = "x";
     static string ESPACIO_VACIO = " ";
+    // Opciones del menú
     static int MODO_HUMANO_CONTRA_HUMANO = 1;
     static int MODO_HUMANO_CONTRA_CPU = 2;
     static int MODO_CPU_CONTRA_CPU = 3;
     static int OPCION_MENU_SALIR = 4;
-    static int ERROR_FILA_INVALIDA = 0;
-    static int ERROR_COLUMNA_LLENA = 28;
-    static int ERROR_NINGUNO = 11;
-    static int CONECTA_ARRIBA = 96;
-    static int CONECTA_ABAJO_DERECHA = 5;
-    static int CONECTA_ARRIBA_DERECHA = 6;
-    static int NO_CONECTA = 7;
-    static int FILA_NO_ENCONTRADA = 8;
-    static int COLUMNA_GANADORA_NO_ENCONTRADA = 9;
-    static int CONECTA_DERECHA = 10;
+    // Otras constantes
+    static int ERROR_FILA_INVALIDA = 24000;
+    static int ERROR_COLUMNA_LLENA = 24001;
+    static int ERROR_NINGUNO = 24002;
+    static int CONECTA_ARRIBA = 24003;
+    static int CONECTA_ABAJO_DERECHA = 25000;
+    static int CONECTA_ARRIBA_DERECHA = 25001;
+    static int NO_CONECTA = 25002;
+    static int FILA_NO_ENCONTRADA = 25003;
+    static int COLUMNA_GANADORA_NO_ENCONTRADA = 25004;
+    static int CONECTA_DERECHA = 25005;
     static string JUGADOR_CPU_2 = JUGADOR_2;
     static string JUGADOR_CPU_1 = JUGADOR_1;
 
